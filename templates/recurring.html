@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Recurring Payments</h3>
+<form class="row g-2 mb-3" method="post" action="{{ url_for('recurring_add') }}">
+  <div class="col-md-3"><input class="form-control" name="name" placeholder="Name (e.g., Internet - Safaricom)" required></div>
+  <div class="col-md-2"><input class="form-control" type="number" step="0.01" name="amount" placeholder="Amount" required></div>
+  <div class="col-md-2"><select class="form-select" name="recurrence"><option>Monthly</option><option>Quarterly</option><option>Yearly</option></select></div>
+  <div class="col-md-2"><input class="form-control" type="number" name="due_day" placeholder="Due day (1-31)" required></div>
+  <div class="col-md-2"><input class="form-control" type="number" name="notify_before_days" placeholder="Notify before (days)" value="5"></div>
+  <div class="col-md-1"><input class="form-control" name="vendor" placeholder="Vendor"></div>
+  <div class="col-md-2"><button class="btn btn-primary w-100">Add</button></div>
+</form>
+
+<table class="table table-hover">
+  <thead><tr><th>Name</th><th>Amount</th><th>Due Day</th><th>Notify</th><th>Vendor</th></tr></thead>
+  <tbody>
+    {% for r in items %}
+    <tr><td>{{ r.name }}</td><td>{{ r.amount }}</td><td>{{ r.due_day }}</td><td>{{ r.notify_before_days }}</td><td>{{ r.vendor or '-' }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

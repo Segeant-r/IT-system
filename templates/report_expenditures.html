@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Report: Expenditures</h3>
+<h6>Total: KES {{ '%.2f'|format(total or 0) }}</h6>
+<table class="table table-striped">
+  <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Doc Type</th><th>Ref</th><th>Vendor</th></tr></thead>
+  <tbody>
+    {% for row in rows %}
+    <tr>
+      <td>{{ row[0] }}</td><td>{{ row[1] }}</td><td>{{ row[2] }}</td><td>{{ '%.2f'|format(row[3]) }}</td><td>{{ row[4] or '-' }}</td><td>{{ row[5] or '-' }}</td><td>{{ row[6] or '-' }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

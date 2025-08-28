@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Users</h3>
+<form method="post" action="{{ url_for('users_add') }}" class="row g-2 mb-3">
+  <div class="col-md-2"><input class="form-control" name="username" placeholder="username" required></div>
+  <div class="col-md-3"><input class="form-control" name="full_name" placeholder="Full name" required></div>
+  <div class="col-md-2"><select name="role" class="form-select"><option>staff</option><option>admin</option></select></div>
+  <div class="col-md-3"><input class="form-control" name="password" placeholder="Password" value="ChangeMe123!"></div>
+  <div class="col-md-2"><button class="btn btn-primary w-100">Add</button></div>
+</form>
+<table class="table table-striped">
+  <thead><tr><th>#</th><th>Username</th><th>Full name</th><th>Role</th></tr></thead>
+  <tbody>
+    {% for u in users %}
+    <tr><td>{{ u.id }}</td><td>{{ u.username }}</td><td>{{ u.full_name }}</td><td>{{ u.role }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

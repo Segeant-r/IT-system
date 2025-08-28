@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Dashboard</h3>
+<div class="row g-3">
+  <div class="col-md-3"><div class="card"><div class="card-body"><h6>Assets</h6><div class="display-6">{{ asset_count }}</div></div></div></div>
+  <div class="col-md-3"><div class="card"><div class="card-body"><h6>Staff</h6><div class="display-6">{{ staff_count }}</div></div></div></div>
+  <div class="col-md-3"><div class="card"><div class="card-body"><h6>Open Repairs</h6><div class="display-6">{{ open_repairs }}</div></div></div></div>
+  <div class="col-md-3"><div class="card"><div class="card-body"><h6>Spend (This Month)</h6><div class="display-6">KES {{ '%.2f'|format(month_spend or 0) }}</div></div></div></div>
+</div>
+{% if alerts %}
+<div class="mt-4">
+  <h5>Upcoming Payments</h5>
+  <ul class="list-group">
+    {% for a in alerts %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      {{ a.name }} due {{ a.due }}
+      <span class="badge bg-warning text-dark">KES {{ '%.2f'|format(a.amount) }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% endblock %}

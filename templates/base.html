@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IT Management System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+  .marquee{
+    background-color: blueviolet;
+    shape-outside: -o-repeating-linear-gradient(2,3);
+  }
+  .name{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  }
+  .sign{
+    align-content: flex-end;
+  }
+  .copyright{
+    align-content: center;
+    right: 50%;
+  }
+  .footer{
+      position: fixed;
+  bottom: 0;  
+  width: 100%;
+  }
+</style>
+<body>
+
+  <h1 class="name"><center>Credible Blooms Limited</center></h1>
+    <h3><center>IT Management System, <marquee class="marquee">solution at your doorstep</marquee></center></h3>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    
+    <a class="navbar-brand" href="{{ url_for('dashboard') }}">Home</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      {% if current_user.is_authenticated %}
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('assets') }}">Assets</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('expenditures') }}">Expenditures</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('recurring') }}">Recurring</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('isps') }}">ISPs</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Reports</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{{ url_for('report_assets_by_user') }}">Who has what</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('report_expenditures') }}">Expenditures</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('report_isp_netpay') }}">ISP Net Pay</a></li>
+          </ul>
+        </li>
+        {% if current_user.role == 'admin' %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('users') }}">Users</a></li>
+        {% endif %}
+      </ul>
+      <span class="navbar-text me-3">{{ current_user.full_name }} ({{ current_user.role }})</span>
+      <a class="btn btn-outline-light" href="{{ url_for('logout') }}">Logout</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+<div class="container py-4">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for cat, msg in messages %}
+    <div class="alert alert-{{ cat }} alert-dismissible fade show" role="alert">{{ msg }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+  {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+<footer class="footer">
+  <div class="sign">
+    <h5>Credible Blooms Limited blooming all the way</h5>
+  </div>
+  <div class="copyright">
+    &copy; 2025 Credible Blooms Limited | All Rights Reserved
+  </div>
+</footer>
+</html>

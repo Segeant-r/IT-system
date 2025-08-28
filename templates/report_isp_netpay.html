@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Report: ISP Net Pay — {{ month }}</h3>
+<table class="table table-bordered">
+  <thead><tr><th>ISP</th><th>Monthly Fee</th><th>Downtime (hrs)</th><th>Deduction</th><th>Net Pay</th></tr></thead>
+  <tbody>
+    {% for i in items %}
+    <tr><td>{{ i.name }}</td><td>{{ '%.2f'|format(i.monthly_fee) }}</td><td>{{ i.downtime_hours }}</td><td>{{ '%.2f'|format(i.deduction) }}</td><td>{{ '%.2f'|format(i.net_pay) }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

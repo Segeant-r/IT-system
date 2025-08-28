@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>{{ asset.name }} <small class="text-muted">({{ asset.tag }})</small></h3>
+<p><strong>Category:</strong> {{ asset.category }} &nbsp; | &nbsp;
+<strong>Serial:</strong> {{ asset.serial_number or '-' }} &nbsp; | &nbsp;
+<strong>Condition:</strong> {{ asset.condition }} &nbsp; | &nbsp;
+<strong>Cost:</strong> KES {{ asset.purchase_cost or 0 }} &nbsp; | &nbsp;
+<strong>Vendor:</strong> {{ asset.vendor or '-' }}</p>
+<hr>
+
+<div class="row g-3">
+  <div class="col-md-6">
+    <h5>Associated Components</h5>
+    <form class="row g-2 mb-2" method="post" action="{{ url_for('asset_component_add', asset_id=asset.id) }}">
+      <div class="col-md-5"><input class="form-control" name="name" placeholder="e.g., Keyboard" required></div>
+      <div class="col-md-4"><input class="form-control" name="serial_number" placeholder="Serial"></div>
+      <div class="col-md-3"><select class="form-select" name="condition"><option>Good</option><option>Fair</option><option>Poor</option></select></div>
+      <div class="col-12"><button class="btn btn-outline-primary mt-1">Add Component</button></div>
+    </form>
+    <ul class="list-group">
+      {% for c in components %}
+      <li class="list-group-item d-flex justify-content-between">
+        {{ c.name }} <span class="text-muted">{{ c.serial_number or '-' }} | {{ c.condition }}</span>
+      </li>
+      {% endfor %}
+      {% if not components %}<li class="list-group-item">No components yet.</li>{% endif %}
+    </ul>
+  </div>
+
+  <div class="col-md-6">
+    <h5>Assignment</h5>
+    {% if current_assignment %}
+      <div class="alert alert-info">
+        Currently assigned to <strong>{{ users_map[current_assignment.user_id].full_name }}</strong> since {{ current_assignment.assigned_on }}
+        <a class="btn btn-sm btn-outline-secondary ms-2" href="{{ url_for('return_assignment', assignment_id=current_assignment.id) }}">Mark Returned</a>
+      </div>
+    {% endif %}
+    <form class="row g-2" method="post" action="{{ url_for('assign') }}">
+      <input type="hidden" name="asset_id" value="{{ asset.id }}">
+      <div class="col-md-8">
+        <select class="form-select" name="user_id" required>
+          {% for u in users %}
+            <option value="{{ u.id }}">{{ u.full_name }} ({{ u.username }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4"><button class="btn btn-primary w-100">Assign</button></div>
+    </form>
+
+    <h6 class="mt-4">Assignment History</h6>
+    <ul class="list-group">
+      {% for h in history %}
+      <li class="list-group-item">
+        {{ (users_map[h.user_id]).full_name }} — {{ h.assigned_on }} to {{ h.returned_on or 'Present' }}
+      </li>
+      {% endfor %}
+      {% if not history %}<li class="list-group-item">No assignments yet.</li>{% endif %}
+    </ul>
+
+    <h5 class="mt-4">Repairs</h5>
+    <form class="row g-2" method="post" action="{{ url_for('repairs_add') }}">
+      <input type="hidden" name="asset_id" value="{{ asset.id }}">
+      <div class="col-md-5"><input class="form-control" name="issue" placeholder="Issue" required></div>
+      <div class="col-md-3"><input class="form-control" name="vendor" placeholder="Vendor"></div>
+      <div class="col-md-2"><input class="form-control" type="number" step="0.01" name="cost" placeholder="Cost"></div>
+      <div class="col-md-2"><button class="btn btn-outline-primary w-100">Add</button></div>
+    </form>
+    <ul class="list-group">
+      {% for r in repairs %}
+      <li class="list-group-item">{{ r.date_reported }} — {{ r.issue }} ({{ r.vendor or 'n/a' }}) : KES {{ r.cost or 0 }}</li>
+      {% endfor %}
+      {% if not repairs %}<li class="list-group-item">No repairs recorded.</li>{% endif %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

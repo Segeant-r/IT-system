@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Report: Who has what</h3>
+<table class="table table-bordered">
+  <thead><tr><th>Staff</th><th>Asset</th><th>Serial</th><th>Assigned On</th></tr></thead>
+  <tbody>
+    {% for row in rows %}
+    <tr><td>{{ row[0] }}</td><td>{{ row[1] }}</td><td>{{ row[2] or '-' }}</td><td>{{ row[3] }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
